@@ -22,11 +22,6 @@ type MovieDetail = {
   Poster: string;
   imdbRating: string;
   Runtime: string;
-  Released: string;
-  Country: string;
-  Writer: string;
-  Language: string;
-  Awards: string;
 };
 
 export default function DetailScreen() {
@@ -38,7 +33,7 @@ export default function DetailScreen() {
   useEffect(() => {
     if (typeof imdbID !== 'string') return;
 
-    fetch(`http://www.omdbapi.com/?apikey=b45dad4f&i=${imdbID}`)
+    fetch(`https://www.omdbapi.com/?apikey=b45dad4f&i=${imdbID}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.Response === 'True') {
@@ -62,9 +57,9 @@ export default function DetailScreen() {
   if (!movie) {
     return (
       <LinearGradient colors={['#0D0C3B', '#1E1B5A']} style={styles.centered}>
-        <Text style={styles.errorText}>Gagal memuat data film.</Text>
+        <Text style={styles.errorText}>❌ Gagal memuat data film.</Text>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Text style={styles.backButtonText}>Kembali</Text>
+          <Text style={styles.backButtonText}>⬅ Kembali</Text>
         </TouchableOpacity>
       </LinearGradient>
     );
@@ -73,89 +68,74 @@ export default function DetailScreen() {
   return (
     <LinearGradient colors={['#0D0C3B', '#1E1B5A']} style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#0D0C3B" />
-
       <ScrollView contentContainerStyle={styles.scroll}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-  <Text style={styles.backButtonText}>← Kembali</Text>
-</TouchableOpacity>
+          <Text style={styles.backButtonText}>⬅ Kembali</Text>
+        </TouchableOpacity>
 
-        <View style={styles.imageContainer}>
-          <Image
-            source={{
-              uri: movie.Poster !== 'N/A'
+        <Image
+          source={{
+            uri:
+              movie.Poster !== 'N/A'
                 ? movie.Poster
                 : 'https://via.placeholder.com/300x450?text=No+Image',
-            }}
-            style={styles.poster}
-          />
-        </View>
+          }}
+          style={styles.poster}
+        />
 
-        
-        <Text style={styles.title}>{movie.Title}</Text>
-
-        <View style={styles.infoBox}>
-          <Text style={styles.detail}>Rilis: {movie.Released}</Text>
-          <Text style={styles.detail}>Bahasa: {movie.Language}</Text>
+        <View style={styles.card}>
+          <Text style={styles.title}>{movie.Title}</Text>
+          <Text style={styles.detail}>Tahun: {movie.Year}</Text>
           <Text style={styles.detail}>Durasi: {movie.Runtime}</Text>
-          <Text style={styles.detail}>IMDb Rating: {movie.imdbRating}</Text>
+          <Text style={styles.detail}>IMDb: {movie.imdbRating}</Text>
           <Text style={styles.detail}>Genre: {movie.Genre}</Text>
           <Text style={styles.detail}>Sutradara: {movie.Director}</Text>
-          <Text style={styles.detail}>Penulis: {movie.Writer}</Text>
-          <Text style={styles.detail}>Pemeran: {movie.Actors}</Text>
+          <Text style={styles.detail}>Aktor: {movie.Actors}</Text>
         </View>
 
-        
-        <Text style={styles.sectionTitle}>Sinopsis</Text>
-        <Text style={styles.plot}>{movie.Plot}</Text>
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>Sinopsis</Text>
+          <Text style={styles.plot}>{movie.Plot}</Text>
+        </View>
       </ScrollView>
     </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
   scroll: {
+    padding: 16,
     paddingBottom: 30,
-    paddingHorizontal: 20,
   },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  imageContainer: {
-    alignItems: 'center',
-    marginTop: 20,
+  poster: {
+    width: '100%',
+    height: 400,
+    borderRadius: 12,
+    marginTop: 12,
+    marginBottom: 16,
+    alignSelf: 'center',
+  },
+  card: {
+    backgroundColor: '#2A2857',
+    padding: 16,
+    borderRadius: 12,
     marginBottom: 16,
   },
-  poster: {
-    width: 240,
-    height: 360,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 6,
-  },
   title: {
-    fontSize: 26,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#fff',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  infoBox: {
-    backgroundColor: '#2A2857',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   detail: {
     fontSize: 15,
-    color: '#ddd',
+    color: '#ccc',
     marginBottom: 6,
   },
   sectionTitle: {
@@ -168,7 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#f0f0f0',
     lineHeight: 22,
-    textAlign: 'justify',
+    textAlign: 'left',
   },
   errorText: {
     color: 'white',
@@ -176,16 +156,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   backButton: {
-  alignSelf: 'flex-start',
-  marginVertical: 16,
-  backgroundColor: '#4C4E91',
-  paddingVertical: 8,
-  paddingHorizontal: 16,
-  borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: '#4C4E91',
+    alignSelf: 'flex-start',
+    borderRadius: 8,
+    marginBottom: 16,
+    marginTop: 20,
   },
   backButtonText: {
     color: '#fff',
-    fontSize: 16,
     fontWeight: 'bold',
+    fontSize: 16,
   },
-  });
+});

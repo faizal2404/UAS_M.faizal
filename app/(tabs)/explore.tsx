@@ -36,7 +36,7 @@ export default function ExploreScreen() {
     const randomKeyword = keywords[Math.floor(Math.random() * keywords.length)];
     try {
       const response = await fetch(
-        `http://www.omdbapi.com/?apikey=b45dad4f&s=${randomKeyword}`
+        `https://www.omdbapi.com/?apikey=b45dad4f&s=${randomKeyword}`
       );
       const data = await response.json();
       if (data.Response === 'True') {
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'row',
-    backgroundColor: '#2A2857', // warna disamakan dengan halaman Home
+    backgroundColor: '#2A2857',
     borderRadius: 12,
     marginBottom: 12,
     overflow: 'hidden',
@@ -134,11 +134,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#fff', // putih
+    color: '#fff',
   },
   meta: {
     fontSize: 14,
-    color: '#ccc', // abu muda
+    color: '#ccc',
     marginTop: 4,
   },
   detailButton: {

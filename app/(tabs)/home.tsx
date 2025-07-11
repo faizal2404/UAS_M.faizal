@@ -16,7 +16,6 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
@@ -45,7 +44,7 @@ export default function HomeScreen() {
   const getRandomMovies = async () => {
     const keyword = placeholderKeywords[Math.floor(Math.random() * placeholderKeywords.length)];
     try {
-      const res = await fetch(`http://www.omdbapi.com/?apikey=b45dad4f&s=${keyword}`);
+      const res = await fetch(`https://www.omdbapi.com/?apikey=b45dad4f&s=${keyword}`);
       const data = await res.json();
       if (data.Response === 'True') {
         setRandomMovies(data.Search.slice(0, 5));
@@ -67,7 +66,7 @@ export default function HomeScreen() {
     setMovies(null);
 
     try {
-      const res = await fetch(`http://www.omdbapi.com/?apikey=b45dad4f&s=${search}`);
+      const res = await fetch(`https://www.omdbapi.com/?apikey=b45dad4f&s=${search}`);
       const data = await res.json();
       if (data.Response === 'True') {
         setMovies(data.Search);
@@ -107,7 +106,7 @@ export default function HomeScreen() {
     <LinearGradient colors={['#0D0C3B', '#1E1B5A']} style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#0D0C3B" />
       <SafeAreaView style={styles.safeArea}>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
+        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           <Text style={styles.title}>OCEANFILM</Text>
 
           {randomMovies.length > 0 && (
@@ -148,12 +147,16 @@ export default function HomeScreen() {
           {loading && <ActivityIndicator size="large" color="#fff" style={{ marginTop: 20 }} />}
 
           {!loading && movies && (
-            <FlatList
-              data={movies}
-              keyExtractor={(item) => item.imdbID}
-              renderItem={renderMovieCard}
-              scrollEnabled={false}
-            />
+            <View style={{ width: '100%', paddingHorizontal: 16 }}>
+              <FlatList
+                data={movies}
+                keyExtractor={(item) => item.imdbID}
+                renderItem={renderMovieCard}
+                scrollEnabled={false}
+                contentContainerStyle={{ paddingBottom: 80 }}
+                showsVerticalScrollIndicator={false}
+              />
+            </View>
           )}
         </ScrollView>
       </SafeAreaView>
@@ -162,31 +165,30 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  safeArea: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
+  container: { flex: 1, backgroundColor: '#0D0C3B' },
+  safeArea: { flex: 1, backgroundColor: 'transparent' },
   scrollContent: {
-    paddingBottom: 80,
+    paddingBottom: 100,
     paddingTop: 40,
     alignItems: 'center',
+    flexGrow: 1,
+    paddingHorizontal: 16,
   },
   title: {
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: 'bold',
     color: '#fff',
-    marginBottom: 12,
+    marginBottom: 20,
+    textAlign: 'center',
+    letterSpacing: 1,
   },
   searchContainer: {
     flexDirection: 'row',
     backgroundColor: '#2A2857',
-    borderRadius: 10,
-    paddingHorizontal: 10,
+    borderRadius: 12,
+    paddingHorizontal: 12,
     alignItems: 'center',
-    width: width - 32,
+    width: '100%',
     marginTop: 20,
   },
   searchInput: {
@@ -198,58 +200,59 @@ const styles = StyleSheet.create({
   searchButton: {
     backgroundColor: '#fff',
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderRadius: 8,
     marginLeft: 8,
+    elevation: 2,
   },
   searchButtonText: {
     color: '#4C4E91',
     fontWeight: 'bold',
+    fontSize: 14,
   },
-  sliderCard: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  sliderCard: { justifyContent: 'center', alignItems: 'center' },
   sliderImage: {
     width: width * 0.9,
-    height: 200,
+    height: 180,
     resizeMode: 'cover',
-    borderRadius: 12,
+    borderRadius: 14,
     marginTop: 10,
+    elevation: 4,
   },
   sliderTitle: {
     color: '#fff',
-    fontWeight: 'bold',
+    fontWeight: '600',
     marginTop: 8,
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 15,
   },
   errorText: {
     textAlign: 'center',
-    color: 'red',
-    fontSize: 16,
-    marginTop: 16,
+    color: '#ff6b6b',
+    fontSize: 14,
+    marginTop: 12,
   },
   card: {
     flexDirection: 'row',
     backgroundColor: '#2A2857',
-    marginHorizontal: 16,
-    marginTop: 12,
     borderRadius: 12,
     overflow: 'hidden',
-    elevation: 3,
+    elevation: 4,
+    marginBottom: 16,
   },
   poster: {
     width: 100,
     height: 150,
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
   },
   cardInfo: {
     flex: 1,
-    padding: 10,
+    padding: 12,
     justifyContent: 'center',
   },
   cardTitle: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: 'bold',
     color: '#fff',
   },
@@ -262,9 +265,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     backgroundColor: '#4C4E91',
     paddingVertical: 6,
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     borderRadius: 6,
     alignSelf: 'flex-start',
+    elevation: 2,
   },
   detailButtonText: {
     fontWeight: 'bold',
