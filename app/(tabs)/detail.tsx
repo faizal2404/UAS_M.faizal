@@ -22,6 +22,7 @@ type MovieDetail = {
   Poster: string;
   imdbRating: string;
   Runtime: string;
+  Ratings: { Source: string; Value: string }[];
 };
 
 export default function DetailScreen() {
@@ -91,6 +92,20 @@ export default function DetailScreen() {
           <Text style={styles.detail}>Genre: {movie.Genre}</Text>
           <Text style={styles.detail}>Sutradara: {movie.Director}</Text>
           <Text style={styles.detail}>Aktor: {movie.Actors}</Text>
+
+          {movie.Ratings.length > 0 && (
+            <View style={{ marginTop: 12 }}>
+              <Text style={styles.sectionTitle}>Rating</Text>
+              {movie.Ratings.map((rating, index) => (
+                <View key={index} style={{ marginBottom: 8 }}>
+                  <Text style={styles.detail}>
+                    {rating.Source}: {rating.Value}
+                  </Text>
+                  {index < movie.Ratings.length - 1 && <View style={styles.divider} />}
+                </View>
+              ))}
+            </View>
+          )}
         </View>
 
         <View style={styles.card}>
@@ -136,7 +151,7 @@ const styles = StyleSheet.create({
   detail: {
     fontSize: 15,
     color: '#ccc',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   sectionTitle: {
     fontSize: 18,
@@ -149,6 +164,11 @@ const styles = StyleSheet.create({
     color: '#f0f0f0',
     lineHeight: 22,
     textAlign: 'left',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#444',
+    marginVertical: 6,
   },
   errorText: {
     color: 'white',
